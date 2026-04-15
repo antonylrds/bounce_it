@@ -1,9 +1,15 @@
 [gd_scene format=3 uid="uid://dw0nfetcfiicu"]
 
-[ext_resource type="Script" uid="uid://dy3jje5hodklh" path="res://scripts/character_body_2d.gd" id="1_s4dg7"]
+[ext_resource type="Script" uid="uid://dy3jje5hodklh" path="res://scripts/char.gd" id="1_s4dg7"]
 [ext_resource type="Texture2D" uid="uid://dqxn8afhoh20w" path="res://assets/iddle_16.png" id="1_wojmw"]
 [ext_resource type="Texture2D" uid="uid://bmvloiaciierv" path="res://assets/running_16.png" id="2_pkhve"]
+[ext_resource type="PackedScene" uid="uid://b26xdif4vudfn" path="res://scenes/ghost.tscn" id="2_ud387"]
+[ext_resource type="Texture2D" uid="uid://68j3r7po7a2e" path="res://assets/dash.png" id="3_2i740"]
 [ext_resource type="Texture2D" uid="uid://bvc8nl5ftc2v3" path="res://assets/jump_16.png" id="3_jy00i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oiyjo"]
+atlas = ExtResource("3_2i740")
+region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23qpd"]
 atlas = ExtResource("3_jy00i")
@@ -51,6 +57,14 @@ region = Rect2(84, 0, 14, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jy00i"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oiyjo")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_23qpd")
@@ -109,14 +123,30 @@ animations = [{
 radius = 7.0
 height = 16.0
 
+[sub_resource type="Curve" id="Curve_2i740"]
+
+[sub_resource type="Gradient" id="Gradient_thp4p"]
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1166974665]
+self_modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_s4dg7")
+ghost_node = ExtResource("2_ud387")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1371443780]
 sprite_frames = SubResource("SpriteFrames_jy00i")
-animation = &"jump"
+animation = &"dash"
 autoplay = "idle"
 speed_scale = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=377373106]
 shape = SubResource("CapsuleShape2D_pkhve")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1695361971]
+emitting = false
+direction = Vector2(-1, 0)
+spread = 40.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+scale_amount_curve = SubResource("Curve_2i740")
+color_ramp = SubResource("Gradient_thp4p")
